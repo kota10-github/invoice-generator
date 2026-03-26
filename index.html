@@ -897,7 +897,7 @@
     <div class="section-title">振込先</div>
     <div class="form-row">
       <div class="form-group">
-        <label>銀行名 <span class="req">※</span></label>
+        <label>鉠行名 <span class="req">※</span></label>
         <input type="text" id="bankName" placeholder="三菱UFJ銀行">
       </div>
       <div class="form-group">
@@ -933,7 +933,7 @@
         <label>税区分 <span class="req">※</span></label>
         <select id="taxMode">
           <option value="exclusive">外税（税抜価格で入力）</option>
-          <option value="inclusive">内税（税辷価格で入力）</option>
+          <option value="inclusive">内税（税込価格で入力）</option>
         </select>
       </div>
       <div class="form-group">
@@ -1348,4 +1348,173 @@
     const taxPct = taxRate === 0.10 ? '10%' : taxRate === 0.08 ? '8%' : '0%';
 
     // Table headers by tax mode
-    const thT
+    const thTax = document.getElementById('thTax');
+    if (isInclusive) {
+      document.getElementById('thPrice').textContent = '単価（税抜）';
+      thTax.style.display = 'none';
+      document.getElementById('thTotal').textContent = '金額（税抜）';
+    } else {
+      document.getElementById('thPrice').textContent = '単価（税抜）';
+      thTax.style.display = 'none';
+      document.getElementById('thTotal').textContent = '金額（税抜）';
+    }
+
+    // Table
+    let subtotalExTax = 0;
+    let totalTax = 0;
+    let subtotalIncTax = 0;
+    const tbody = document.getElementById('pTableBody');
+    tbody.innerHTML = '';
+    items.forEach(item => {
+      const lineInput = item.quantity * item.price;
+      let lineExTax, lineTax, lineIncTax;
+
+      if (isInclusive) {
+        // 内税: 入力値は税込 → 税抜・税額を逆算
+        lineIncTax = lineInput;
+        lineExTax = Math.floor(lineInput / (1 + taxRate));
+        lineTax = lineIncTax - lineExTax;
+      } else {
+        // 外税: 入力値は税抜 → 税額を加算
+        lineExTax = lineInput;
+        lineTax = Math.floor(lineInput * taxRate);
+        lineIncTax = lineExTax + lineTax;
+      }
+      subtotalExTax += lineExTax;
+      totalTax += lineTax;
+      subtotalIncTax += lineIncTax;
+
+      const tr = document.createElement('tr');
+      // 内税の場合: priceは税込入力値なので税抜単価を逆算表示
+      const displayPrice = isInclusive ? Math.floor(item.price / (1 + taxRate)) : item.price;
+      tr.innerHTML = `
+        <td>${esc(item.name) || '—'}</td>
+        <td>${fmt(item.quantity)}</td>
+        <td>${fmtYen(displayPrice)}</td>
+        <td>${fmtYen(lineExTax)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const grandTotal = subtotalExTax + totalTax;
+
+    // Summary labels & values
+    if (isInclusive) {
+      document.getElementById('pSubtotalLabel').textContent = '小計（税抜）';
+      document.getElementById('pSubtotal').textContent = fmtYen(subtotalExTax);
+      document.getElementById('pTaxLabel').textContent = `消費税（${taxPct}）`;
+      document.getElementById('pTax').textContent = fmtYen(totalTax);
+      document.getElementById('pTotalLabel').textContent = '合計（税込）';
+      document.getElementById('pTotal').textContent = fmtYen(grandTotal);
+    } else {
+      document.getElementById('pSubtotalLabel').textContent = '小計（税抜）';
+      document.getElementById('pSubtotal').textContent = fmtYen(subtotalExTax);
+      document.getElementById('pTaxLabel').textContent = `消費税（${taxPct}）`;
+      document.getElementById('pTax').textContent = fmtYen(totalTax);
+      document.getElementById('pTotalLabel').textContent = '合計（税込）';
+      document.getElementById('pTotal').textContent = fmtYen(grandTotal);
+    }
+    document.getElementById('pGrandTotal').textContent = `¥${fmt(grandTotal)}`;
+
+    // Notes
+    const notes = v('notes');
+    const bankBox = document.getElementById('bankBox');
+    if (notes) {
+      bankBox.style.display = 'block';
+      document.getElementById('pNotes').textContent = notes;
+    } else {
+      bankBox.style.display = 'none';
+    }
+
+  }
+
+  // ===== FORMATTING =====
+  function fmt(n) {
+    return Number(n).toLocaleString('ja-JP');
+  }
+
+  function fmtYen(n) {
+    return `¥${Number(n).toLocaleString('ja-JP')}`;
+  }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  // ===== ZOOM =====
+  let currentZoom = 1.0;
+
+  function setZoom(delta) {
+    currentZoom = Math.max(0.3, Math.min(2.0, currentZoom + delta));
+    applyZoom();
+  }
+
+  function resetZoom() {
+    currentZoom = 1.0;
+    applyZoom();
+  }
+
+  function applyZoom() {
+    const page = document.getElementById('invoicePreview');
+    page.style.transform = `scale(${currentZoom})`;
+    page.style.transformOrigin = 'top center';
+    document.getElementById('zoomLabel').textContent = Math.round(currentZoom * 100) + '%';
+  }
+
+  // ===== PDF EXPORT =====
+  function exportPDF() {
+    // PDF出力時にプロフィールも自動保存
+    saveProfile();
+
+    const overlay = document.getElementById('savingOverlay');
+    overlay.classList.add('active');
+
+    const el = document.getElementById('invoicePreview');
+
+    // ズームをリセットして出力、完了後に戻す
+    const prevZoom = currentZoom;
+    currentZoom = 1.0;
+    el.style.transform = 'scale(1)';
+    el.style.transformOrigin = 'top center';
+
+    // ファイル名: 請求書_(相手名)_(品目)_(発行者名)
+    const clientName = document.getElementById('clientName').value || '請求先';
+    const issuerName = document.getElementById('issuerName').value || '発行元';
+    const firstItem = items[0] && items[0].name ? items[0].name : '品目';
+    const filename = `請求書_${clientName}_${firstItem}_${issuerName}.pdf`;
+
+    const opt = {
+      margin: 0,
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        width: 794,
+        height: 1123
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all'] }
+    };
+
+    html2pdf().set(opt).from(el).save().then(() => {
+      overlay.classList.remove('active');
+      currentZoom = prevZoom;
+      applyZoom();
+    }).catch(() => {
+      overlay.classList.remove('active');
+      currentZoom = prevZoom;
+      applyZoom();
+      alert('PDF生成中にエラーが発生しました。');
+    });
+  }
+
+  // ===== START =====
+  setupLogin();
+</script>
+
+</body>
+</html>
