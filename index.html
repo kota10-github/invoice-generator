@@ -891,16 +891,8 @@
       </div>
     </div>
     <div class="form-group">
-      <label>住所1 <span class="req">※</span></label>
-      <input type="text" id="issuerAddress1" placeholder="東京都千代田区千代田1-1">
-    </div>
-    <div class="form-group">
-      <label>住所2 <span class="opt">任意</span></label>
-      <input type="text" id="issuerAddress2" placeholder="〇〇ビル 3F">
-    </div>
-    <div class="form-group">
-      <label>住所3 <span class="opt">任意</span></label>
-      <input type="text" id="issuerAddress3" placeholder="">
+      <label>住所 <span class="req">※</span></label>
+      <textarea id="issuerAddress" rows="2" placeholder="東京都千代田区千代田1-1&#10;〇〇ビル 3F"></textarea>
     </div>
     <div class="form-group">
       <label>メール</label>
@@ -1123,7 +1115,7 @@
   }
 
   // ===== PROFILE SAVE / LOAD =====
-  const profileFields = ['clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress1','issuerAddress2','issuerAddress3','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
+  const profileFields = ['clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
 
   async function saveProfile() {
     if (!currentUserEmail) return;
@@ -1207,7 +1199,7 @@
     });
 
     // Bind inputs
-    const ids = ['invoiceDate','invoiceNumber','clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress1','issuerAddress2','issuerAddress3','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
+    const ids = ['invoiceDate','invoiceNumber','clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
     ids.forEach(id => {
       document.getElementById(id).addEventListener('input', render);
       document.getElementById(id).addEventListener('change', render);
@@ -1342,14 +1334,8 @@
     if (v('issuerName')) issuerHtml += `<strong>${esc(v('issuerName'))}</strong>`;
     let issuerRows = '';
     if (v('issuerZip')) issuerRows += `<tr><td class="il">郵便番号</td><td class="ic">：</td><td class="iv">〒${esc(v('issuerZip'))}</td></tr>`;
-    const addr1 = v('issuerAddress1');
-      const addr2 = v('issuerAddress2');
-      const addr3 = v('issuerAddress3');
-      if (addr1 || addr2 || addr3) {
-        let addrHtml = '';
-        if (addr1) addrHtml += esc(addr1);
-        if (addr2) addrHtml += '<br>' + esc(addr2);
-        if (addr3) addrHtml += '<br>' + esc(addr3);
+      if (v('issuerAddress')) {
+        const addrHtml = esc(v('issuerAddress')).replace(/\n/g, '<br>');
         issuerRows += `<tr><td class="il">住所</td><td class="ic">：</td><td class="iv">${addrHtml}</td></tr>`;
       }
     if (v('issuerPhone')) issuerRows += `<tr><td class="il">電話番号</td><td class="ic">：</td><td class="iv">${esc(v('issuerPhone'))}</td></tr>`;
