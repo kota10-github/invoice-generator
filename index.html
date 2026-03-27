@@ -414,6 +414,10 @@
     flex: 1;
   }
 
+  .info-col.issuer-col {
+    flex: 1.4;
+  }
+
   .info-col-title {
     font-size: 12px;
     font-weight: 600;
@@ -991,7 +995,7 @@
       </div>
 
       <div class="info-columns">
-        <div class="info-col">
+        <div class="info-col issuer-col">
           <div class="info-col-title" id="issuerTitle" style="border-color: #2c5f7c;">発行元</div>
           <div class="info-item" id="pIssuerInfo"></div>
         </div>
@@ -1111,7 +1115,7 @@
   }
 
   // ===== PROFILE SAVE / LOAD =====
-  const profileFields = ['clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
+  const profileFields = ['clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress1','issuerAddress2','issuerAddress3','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
 
   async function saveProfile() {
     if (!currentUserEmail) return;
@@ -1195,7 +1199,7 @@
     });
 
     // Bind inputs
-    const ids = ['invoiceDate','invoiceNumber','clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
+    const ids = ['invoiceDate','invoiceNumber','clientType','clientName','issuerType','issuerName','issuerRegNo','issuerZip','issuerPhone','issuerAddress1','issuerAddress2','issuerAddress3','issuerEmail','bankName','bankBranch','bankType','bankAccount','bankHolder','taxMode','taxRate','notes'];
     ids.forEach(id => {
       document.getElementById(id).addEventListener('input', render);
       document.getElementById(id).addEventListener('change', render);
@@ -1330,7 +1334,16 @@
     if (v('issuerName')) issuerHtml += `<strong>${esc(v('issuerName'))}</strong>`;
     let issuerRows = '';
     if (v('issuerZip')) issuerRows += `<tr><td class="il">郵便番号</td><td class="ic">：</td><td class="iv">〒${esc(v('issuerZip'))}</td></tr>`;
-    if (v('issuerAddress')) issuerRows += `<tr><td class="il">住所</td><td class="ic">：</td><td class="iv">${esc(v('issuerAddress'))}</td></tr>`;
+    const addr1 = v('issuerAddress1');
+      const addr2 = v('issuerAddress2');
+      const addr3 = v('issuerAddress3');
+      if (addr1 || addr2 || addr3) {
+        let addrHtml = '';
+        if (addr1) addrHtml += esc(addr1);
+        if (addr2) addrHtml += '<br>' + esc(addr2);
+        if (addr3) addrHtml += '<br>' + esc(addr3);
+        issuerRows += `<tr><td class="il">住所</td><td class="ic">：</td><td class="iv">${addrHtml}</td></tr>`;
+      }
     if (v('issuerPhone')) issuerRows += `<tr><td class="il">電話番号</td><td class="ic">：</td><td class="iv">${esc(v('issuerPhone'))}</td></tr>`;
     if (v('issuerEmail')) issuerRows += `<tr><td class="il">メール</td><td class="ic">：</td><td class="iv">${esc(v('issuerEmail'))}</td></tr>`;
     if (issuerRows) issuerHtml += `<table>${issuerRows}</table>`;
