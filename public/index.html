@@ -231,6 +231,49 @@
     transform: scale(1.15);
   }
 
+  /* ===== TEMPLATE SELECTOR ===== */
+  .template-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .template-option {
+    flex: 1;
+    padding: 10px 8px;
+    border: 2px solid #d0d5dd;
+    border-radius: 8px;
+    background: #f9fafb;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .template-option:hover {
+    border-color: #999;
+  }
+
+  .template-option.active {
+    border-color: #2c5f7c;
+    background: rgba(44, 95, 124, 0.06);
+    color: #2c5f7c;
+  }
+
+  .template-option .tpl-label {
+    font-size: 11px;
+    font-weight: 400;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  .template-option.active .tpl-label {
+    color: #2c5f7c;
+  }
+
   /* ===== PREVIEW PANEL ===== */
   .preview-panel {
     flex: 1;
@@ -281,10 +324,10 @@
     font-weight: 600;
   }
 
-  /* ===== INVOICE ===== */
+  /* ===== INVOICE (MODERN) ===== */
   .invoice-page {
-    width: 794px; /* A4 = 210mm ≈ 794px at 96dpi */
-    height: 1123px; /* A4 = 297mm ≈ 1123px at 96dpi */
+    width: 794px;
+    height: 1123px;
     background: #fff;
     padding: 30px 48px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.12);
@@ -591,7 +634,256 @@
     margin-bottom: 6px;
   }
 
-  /* Footer — removed */
+  /* ===== CLASSIC TEMPLATE ===== */
+  .classic-page {
+    width: 794px;
+    height: 1123px;
+    background: #fff;
+    padding: 40px 50px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    position: relative;
+    color: #333;
+    overflow: hidden;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .classic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+  }
+
+  .classic-meta {
+    text-align: right;
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .classic-meta-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+
+  .classic-meta-label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .classic-meta-value {
+    font-weight: 400;
+    color: #333;
+    min-width: 160px;
+    text-align: left;
+  }
+
+  .classic-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 16px;
+    text-align: left;
+    margin-bottom: 24px;
+    padding-bottom: 4px;
+    border-bottom: 3px double #333;
+    display: inline-block;
+  }
+
+  .classic-client {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .classic-client-honorific {
+    font-size: 16px;
+    font-weight: 400;
+    margin-left: 8px;
+  }
+
+  .classic-greeting {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .classic-total-issuer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    gap: 40px;
+  }
+
+  .classic-total-box {
+    border: 2px solid #333;
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 340px;
+  }
+
+  .classic-total-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .classic-total-amount {
+    font-size: 26px;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 1px;
+  }
+
+  .classic-issuer-info {
+    font-size: 12px;
+    line-height: 1.8;
+    color: #333;
+    text-align: left;
+  }
+
+  .classic-issuer-info strong {
+    font-size: 14px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .classic-issuer-detail {
+    display: flex;
+    gap: 4px;
+  }
+
+  .classic-issuer-detail-label {
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 60px;
+  }
+
+  .classic-issuer-detail-colon {
+    color: #666;
+  }
+
+  .classic-issuer-detail-value {
+    font-weight: 400;
+  }
+
+  /* Classic table */
+  .classic-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+
+  .classic-table thead th {
+    background: #555;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .classic-table thead th:nth-child(n+2) {
+    text-align: right;
+  }
+
+  .classic-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    font-weight: 400;
+  }
+
+  .classic-table tbody td:nth-child(n+2) {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .classic-table tbody tr:last-child td {
+    border-bottom: 2px solid #999;
+  }
+
+  /* Classic summary */
+  .classic-summary {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+  }
+
+  .classic-summary-table {
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .classic-summary-table td {
+    padding: 6px 14px;
+  }
+
+  .classic-summary-table .cs-label {
+    font-weight: 400;
+    color: #333;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .classic-summary-table .cs-value {
+    font-weight: 600;
+    color: #333;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    min-width: 130px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .classic-summary-table .cs-total td {
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 2px solid #333;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  /* Classic bank box */
+  .classic-bank-box {
+    border: 1px solid #999;
+    padding: 14px 18px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .classic-bank-title {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .classic-bank-note {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 2px;
+  }
+
+  .classic-bank-detail {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-weight: 400;
+  }
+
+  .classic-bank-item {
+    display: flex;
+    gap: 2px;
+  }
+
+  .classic-bank-item-label {
+    font-weight: 600;
+    white-space: nowrap;
+  }
 
   /* Responsive hint */
   @media (max-width: 1300px) {
@@ -876,13 +1168,27 @@
       </div>
     </div>
 
-    <div class="section-title">テーマカラー</div>
-    <div class="color-picker-row" id="colorPicker">
-      <div class="color-swatch active" style="background:#2c5f7c" data-color="#2c5f7c"></div>
-      <div class="color-swatch" style="background:#1a5c3a" data-color="#1a5c3a"></div>
-      <div class="color-swatch" style="background:#7c2c2c" data-color="#7c2c2c"></div>
-      <div class="color-swatch" style="background:#5c3a7c" data-color="#5c3a7c"></div>
-      <div class="color-swatch" style="background:#333333" data-color="#333333"></div>
+    <div class="section-title">テンプレート</div>
+    <div class="template-selector" id="templateSelector">
+      <div class="template-option active" data-template="modern" onclick="setTemplate('modern')">
+        モダン
+        <div class="tpl-label">カラー対応</div>
+      </div>
+      <div class="template-option" data-template="classic" onclick="setTemplate('classic')">
+        クラシック
+        <div class="tpl-label">ビジネス標準</div>
+      </div>
+    </div>
+
+    <div id="colorSection">
+      <div class="section-title">テーマカラー</div>
+      <div class="color-picker-row" id="colorPicker">
+        <div class="color-swatch active" style="background:#2c5f7c" data-color="#2c5f7c"></div>
+        <div class="color-swatch" style="background:#1a5c3a" data-color="#1a5c3a"></div>
+        <div class="color-swatch" style="background:#7c2c2c" data-color="#7c2c2c"></div>
+        <div class="color-swatch" style="background:#5c3a7c" data-color="#5c3a7c"></div>
+        <div class="color-swatch" style="background:#333333" data-color="#333333"></div>
+      </div>
     </div>
 
     <div class="section-title">請求情報</div>
@@ -944,7 +1250,7 @@
     <div class="section-title">振込先</div>
     <div class="form-row">
       <div class="form-group">
-        <label>鉠行名 <span class="req">※</span></label>
+        <label>銀行名 <span class="req">※</span></label>
         <input type="text" id="bankName" placeholder="三菱UFJ銀行">
       </div>
       <div class="form-group">
@@ -1011,6 +1317,8 @@
       <button class="btn-zoom" onclick="setZoom(0.1)">＋</button>
       <button class="btn-zoom" onclick="resetZoom()" style="margin-left:8px; font-size:10px;">リセット</button>
     </div>
+
+    <!-- MODERN TEMPLATE -->
     <div class="invoice-page" id="invoicePreview">
       <div class="invoice-accent-line" id="accentLine" style="background: linear-gradient(90deg, #2c5f7c, #4a9cc5);"></div>
 
@@ -1053,7 +1361,7 @@
             <th style="width:50%">品　名</th>
             <th style="width:10%">数量</th>
             <th style="width:20%" id="thPrice">単価（税抜）</th>
-            <th style="width:0%" id="thTax" style="display:none">消費税</th>
+            <th style="width:0%; display:none" id="thTax">消費税</th>
             <th style="width:20%" id="thTotal">金額（税抜）</th>
           </tr>
         </thead>
@@ -1080,9 +1388,79 @@
       <div class="bank-box" id="bankBox" style="display:none;">
         <div class="bank-note" id="pNotes"></div>
       </div>
-
-      <!-- footer removed -->
     </div>
+
+    <!-- CLASSIC TEMPLATE -->
+    <div class="classic-page" id="classicPreview" style="display:none">
+      <div class="classic-header">
+        <div></div>
+        <div class="classic-meta">
+          <div class="classic-meta-row"><span class="classic-meta-label">請求日：</span><span class="classic-meta-value" id="cDate">2026/03/25</span></div>
+          <div class="classic-meta-row"><span class="classic-meta-label">請求番号：</span><span class="classic-meta-value" id="cNumber">INV-260325-001</span></div>
+          <div class="classic-meta-row" id="cRegNoLine" style="display:none"><span class="classic-meta-label">登録番号：</span><span class="classic-meta-value" id="cRegNo"></span></div>
+        </div>
+      </div>
+
+      <div class="classic-title">請　求　書</div>
+
+      <div class="classic-client">
+        <span id="cClient">株式会社〇〇</span><span class="classic-client-honorific" id="cHonorific">御中</span>
+      </div>
+
+      <div class="classic-greeting">下記のとおりご請求申し上げます。</div>
+
+      <div class="classic-total-issuer-row">
+        <div class="classic-total-box">
+          <div class="classic-total-label">ご請求金額（税込）</div>
+          <div class="classic-total-amount" id="cGrandTotal">¥0</div>
+        </div>
+        <div class="classic-issuer-info" id="cIssuerInfo"></div>
+      </div>
+
+      <table class="classic-table">
+        <thead>
+          <tr>
+            <th style="width:50%">品名</th>
+            <th style="width:10%">数量</th>
+            <th style="width:20%" id="cThPrice">単価</th>
+            <th style="width:20%" id="cThTotal">金額</th>
+          </tr>
+        </thead>
+        <tbody id="cTableBody">
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="classic-summary">
+        <table class="classic-summary-table">
+          <tr>
+            <td class="cs-label" id="cSubtotalLabel">小計</td>
+            <td class="cs-value" id="cSubtotal">¥0</td>
+          </tr>
+          <tr>
+            <td class="cs-label" id="cTaxLabel">消費税（10%）</td>
+            <td class="cs-value" id="cTax">¥0</td>
+          </tr>
+          <tr class="cs-total">
+            <td class="cs-label" id="cTotalLabel">合計</td>
+            <td class="cs-value" id="cTotal">¥0</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="classic-bank-box" id="cBankBox">
+        <div class="classic-bank-note" id="cBankNote">お振込先　※恐れ入りますがお振込み手数料は貴社にてご負担ください</div>
+        <div class="classic-bank-detail" id="cBankDetail"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1096,6 +1474,7 @@
   let items = [{ name: '', quantity: 1, price: 0 }];
   let currentUserEmail = null;
   let isRegisterMode = false;
+  let currentTemplate = 'modern';
 
   // ===== HASH =====
   async function hashString(str) {
@@ -1212,7 +1591,6 @@
       confirmWrap.style.display = 'none';
       document.getElementById('loginPassword').autocomplete = 'current-password';
     }
-    // Re-validate
     document.getElementById('btnLogin').disabled = true;
     document.getElementById('loginEmail').dispatchEvent(new Event('input'));
   }
@@ -1267,9 +1645,31 @@
     document.getElementById('loginError').textContent = '';
     document.getElementById('btnLogin').disabled = true;
     document.getElementById('userBar').style.display = 'none';
-    // Reset to login mode
     isRegisterMode = true;
     toggleLoginMode();
+  }
+
+  // ===== TEMPLATE =====
+  function setTemplate(tpl) {
+    currentTemplate = tpl;
+    document.querySelectorAll('.template-option').forEach(el => {
+      el.classList.toggle('active', el.dataset.template === tpl);
+    });
+
+    const modernEl = document.getElementById('invoicePreview');
+    const classicEl = document.getElementById('classicPreview');
+    const colorSection = document.getElementById('colorSection');
+
+    if (tpl === 'modern') {
+      modernEl.style.display = '';
+      classicEl.style.display = 'none';
+      colorSection.style.display = '';
+    } else {
+      modernEl.style.display = 'none';
+      classicEl.style.display = '';
+      colorSection.style.display = 'none';
+    }
+    render();
   }
 
   // ===== PROFILE SAVE / LOAD =====
@@ -1284,6 +1684,7 @@
     });
     data.items = items;
     data.accentColor = accentColor;
+    data.template = currentTemplate;
     localStorage.setItem(key, JSON.stringify(data));
     showToast('保存しました');
   }
@@ -1309,6 +1710,9 @@
           s.classList.toggle('active', s.dataset.color === accentColor);
         });
         applyColor();
+      }
+      if (data.template) {
+        setTemplate(data.template);
       }
     } catch(e) { /* ignore corrupt data */ }
   }
@@ -1339,7 +1743,6 @@
     document.getElementById('invoiceSeq').value = seq;
     document.getElementById('invoiceNumber').value = buildInvoiceNumber();
 
-    // 請求日変更時に請求番号を再生成
     document.getElementById('invoiceDate').addEventListener('change', function() {
       document.getElementById('invoiceNumber').value = buildInvoiceNumber();
       render();
@@ -1453,20 +1856,65 @@
     const v = id => document.getElementById(id).value;
     const taxRate = parseFloat(v('taxRate'));
 
-    // 内税/外税が変わったら品目ラベルを再描画
     const curTaxMode = v('taxMode');
     if (curTaxMode !== lastTaxMode) {
       lastTaxMode = curTaxMode;
       renderItems();
     }
 
-    // Meta
+    const isInclusive = v('taxMode') === 'inclusive';
+    const taxPct = taxRate === 0.10 ? '10%' : taxRate === 0.08 ? '8%' : '0%';
     const dateStr = v('invoiceDate').replace(/-/g, '/');
-    document.getElementById('pDate').textContent = dateStr;
     const invNum = buildInvoiceNumber();
     document.getElementById('invoiceNumber').value = invNum;
-    document.getElementById('pNumber').textContent = invNum;
+
+    // Compute totals
+    let subtotalExTax = 0;
+    let totalTax = 0;
+    const lineData = items.map(item => {
+      const lineInput = item.quantity * item.price;
+      let lineExTax, lineTax;
+      if (isInclusive) {
+        const lineIncTax = lineInput;
+        lineExTax = Math.floor(lineInput / (1 + taxRate));
+        lineTax = lineIncTax - lineExTax;
+      } else {
+        lineExTax = lineInput;
+        lineTax = Math.floor(lineInput * taxRate);
+      }
+      subtotalExTax += lineExTax;
+      totalTax += lineTax;
+      const displayPrice = isInclusive ? Math.floor(item.price / (1 + taxRate)) : item.price;
+      return { name: item.name, quantity: item.quantity, displayPrice, lineExTax };
+    });
+    const grandTotal = subtotalExTax + totalTax;
+
+    // Client
+    const isCompany = v('clientType') === 'company';
+    document.getElementById('clientNameLabel').innerHTML = (isCompany ? '会社名' : '氏名') + ' <span class="req">※</span>';
+    document.getElementById('clientName').placeholder = isCompany ? '株式会社〇〇' : '山田 太郎';
+    const clientDisplay = v('clientName') || (isCompany ? '（請求先会社名）' : '（請求先氏名）');
+    const honorific = isCompany ? '御中' : '様';
+
+    // Issuer type
+    const issuerIsCompany = v('issuerType') === 'company';
+    document.getElementById('issuerNameLabel').innerHTML = (issuerIsCompany ? '会社名' : '氏名') + ' <span class="req">※</span>';
+    document.getElementById('issuerName').placeholder = issuerIsCompany ? '合同会社△△' : '山田 太郎';
+
     const regNo = v('issuerRegNo');
+
+    if (currentTemplate === 'modern') {
+      renderModern(v, dateStr, invNum, regNo, clientDisplay, honorific, isInclusive, taxPct, lineData, subtotalExTax, totalTax, grandTotal);
+    }
+    if (currentTemplate === 'classic') {
+      renderClassic(v, dateStr, invNum, regNo, clientDisplay, honorific, isInclusive, taxPct, lineData, subtotalExTax, totalTax, grandTotal);
+    }
+  }
+
+  function renderModern(v, dateStr, invNum, regNo, clientDisplay, honorific, isInclusive, taxPct, lineData, subtotalExTax, totalTax, grandTotal) {
+    // Meta
+    document.getElementById('pDate').textContent = dateStr;
+    document.getElementById('pNumber').textContent = invNum;
     const regNoLine = document.getElementById('pRegNoLine');
     if (regNo) {
       regNoLine.style.display = 'table-row';
@@ -1476,26 +1924,18 @@
     }
 
     // Client
-    const isCompany = v('clientType') === 'company';
-    document.getElementById('clientNameLabel').innerHTML = (isCompany ? '会社名' : '氏名') + ' <span class="req">※</span>';
-    document.getElementById('clientName').placeholder = isCompany ? '株式会社〇〇' : '山田 太郎';
-    document.getElementById('pClient').textContent = v('clientName') || (isCompany ? '（請求先会社名）' : '（請求先氏名）');
-    document.getElementById('pHonorific').textContent = isCompany ? '御中' : '様';
-
-    // Issuer type
-    const issuerIsCompany = v('issuerType') === 'company';
-    document.getElementById('issuerNameLabel').innerHTML = (issuerIsCompany ? '会社名' : '氏名') + ' <span class="req">※</span>';
-    document.getElementById('issuerName').placeholder = issuerIsCompany ? '合同会社△△' : '山田 太郎';
+    document.getElementById('pClient').textContent = clientDisplay;
+    document.getElementById('pHonorific').textContent = honorific;
 
     // Issuer info
     let issuerHtml = '';
     if (v('issuerName')) issuerHtml += `<strong>${esc(v('issuerName'))}</strong>`;
     let issuerRows = '';
     if (v('issuerZip')) issuerRows += `<tr><td class="il">郵便番号</td><td class="ic">：</td><td class="iv">〒${esc(v('issuerZip'))}</td></tr>`;
-      if (v('issuerAddress')) {
-        const addrHtml = esc(v('issuerAddress')).replace(/\n/g, '<br>');
-        issuerRows += `<tr><td class="il">住所</td><td class="ic">：</td><td class="iv">${addrHtml}</td></tr>`;
-      }
+    if (v('issuerAddress')) {
+      const addrHtml = esc(v('issuerAddress')).replace(/\n/g, '<br>');
+      issuerRows += `<tr><td class="il">住所</td><td class="ic">：</td><td class="iv">${addrHtml}</td></tr>`;
+    }
     if (v('issuerPhone')) issuerRows += `<tr><td class="il">電話番号</td><td class="ic">：</td><td class="iv">${esc(v('issuerPhone'))}</td></tr>`;
     if (v('issuerEmail')) issuerRows += `<tr><td class="il">メール</td><td class="ic">：</td><td class="iv">${esc(v('issuerEmail'))}</td></tr>`;
     if (issuerRows) issuerHtml += `<table>${issuerRows}</table>`;
@@ -1510,77 +1950,33 @@
     if (v('bankHolder')) bankRows += `<tr><td class="il">名義</td><td class="ic">：</td><td class="iv">${esc(v('bankHolder'))}</td></tr>`;
     document.getElementById('pBankInfo').innerHTML = bankRows ? `<table>${bankRows}</table>` : '';
 
-    // Tax mode
-    const isInclusive = v('taxMode') === 'inclusive';
-    const taxPct = taxRate === 0.10 ? '10%' : taxRate === 0.08 ? '8%' : '0%';
-
-    // Table headers by tax mode
+    // Table headers
     const thTax = document.getElementById('thTax');
-    if (isInclusive) {
-      document.getElementById('thPrice').textContent = '単価（税抜）';
-      thTax.style.display = 'none';
-      document.getElementById('thTotal').textContent = '金額（税抜）';
-    } else {
-      document.getElementById('thPrice').textContent = '単価（税抜）';
-      thTax.style.display = 'none';
-      document.getElementById('thTotal').textContent = '金額（税抜）';
-    }
+    document.getElementById('thPrice').textContent = '単価（税抜）';
+    thTax.style.display = 'none';
+    document.getElementById('thTotal').textContent = '金額（税抜）';
 
-    // Table
-    let subtotalExTax = 0;
-    let totalTax = 0;
-    let subtotalIncTax = 0;
+    // Table body
     const tbody = document.getElementById('pTableBody');
     tbody.innerHTML = '';
-    items.forEach(item => {
-      const lineInput = item.quantity * item.price;
-      let lineExTax, lineTax, lineIncTax;
-
-      if (isInclusive) {
-        // 内税: 入力値は税込 → 税抜・税額を逆算
-        lineIncTax = lineInput;
-        lineExTax = Math.floor(lineInput / (1 + taxRate));
-        lineTax = lineIncTax - lineExTax;
-      } else {
-        // 外税: 入力値は税抜 → 税額を加算
-        lineExTax = lineInput;
-        lineTax = Math.floor(lineInput * taxRate);
-        lineIncTax = lineExTax + lineTax;
-      }
-      subtotalExTax += lineExTax;
-      totalTax += lineTax;
-      subtotalIncTax += lineIncTax;
-
+    lineData.forEach(d => {
       const tr = document.createElement('tr');
-      // 内税の場合: priceは税込入力値なので税抜単価を逆算表示
-      const displayPrice = isInclusive ? Math.floor(item.price / (1 + taxRate)) : item.price;
       tr.innerHTML = `
-        <td>${esc(item.name) || '—'}</td>
-        <td>${fmt(item.quantity)}</td>
-        <td>${fmtYen(displayPrice)}</td>
-        <td>${fmtYen(lineExTax)}</td>
+        <td>${esc(d.name) || '—'}</td>
+        <td>${fmt(d.quantity)}</td>
+        <td>${fmtYen(d.displayPrice)}</td>
+        <td>${fmtYen(d.lineExTax)}</td>
       `;
       tbody.appendChild(tr);
     });
 
-    const grandTotal = subtotalExTax + totalTax;
-
-    // Summary labels & values
-    if (isInclusive) {
-      document.getElementById('pSubtotalLabel').textContent = '小計（税抜）';
-      document.getElementById('pSubtotal').textContent = fmtYen(subtotalExTax);
-      document.getElementById('pTaxLabel').textContent = `消費税（${taxPct}）`;
-      document.getElementById('pTax').textContent = fmtYen(totalTax);
-      document.getElementById('pTotalLabel').textContent = '合計（税込）';
-      document.getElementById('pTotal').textContent = fmtYen(grandTotal);
-    } else {
-      document.getElementById('pSubtotalLabel').textContent = '小計（税抜）';
-      document.getElementById('pSubtotal').textContent = fmtYen(subtotalExTax);
-      document.getElementById('pTaxLabel').textContent = `消費税（${taxPct}）`;
-      document.getElementById('pTax').textContent = fmtYen(totalTax);
-      document.getElementById('pTotalLabel').textContent = '合計（税込）';
-      document.getElementById('pTotal').textContent = fmtYen(grandTotal);
-    }
+    // Summary
+    document.getElementById('pSubtotalLabel').textContent = '小計（税抜）';
+    document.getElementById('pSubtotal').textContent = fmtYen(subtotalExTax);
+    document.getElementById('pTaxLabel').textContent = `消費税（${taxPct}）`;
+    document.getElementById('pTax').textContent = fmtYen(totalTax);
+    document.getElementById('pTotalLabel').textContent = '合計（税込）';
+    document.getElementById('pTotal').textContent = fmtYen(grandTotal);
     document.getElementById('pGrandTotal').textContent = `¥${fmt(grandTotal)}`;
 
     // Notes
@@ -1592,7 +1988,81 @@
     } else {
       bankBox.style.display = 'none';
     }
+  }
 
+  function renderClassic(v, dateStr, invNum, regNo, clientDisplay, honorific, isInclusive, taxPct, lineData, subtotalExTax, totalTax, grandTotal) {
+    // Meta
+    document.getElementById('cDate').textContent = dateStr;
+    document.getElementById('cNumber').textContent = invNum;
+    const cRegNoLine = document.getElementById('cRegNoLine');
+    if (regNo) {
+      cRegNoLine.style.display = 'flex';
+      document.getElementById('cRegNo').textContent = regNo;
+    } else {
+      cRegNoLine.style.display = 'none';
+    }
+
+    // Client
+    document.getElementById('cClient').textContent = clientDisplay;
+    document.getElementById('cHonorific').textContent = ' ' + honorific;
+
+    // Grand total
+    document.getElementById('cGrandTotal').textContent = `¥${fmt(grandTotal)}`;
+
+    // Issuer info (right side)
+    let issuerHtml = '';
+    if (v('issuerName')) issuerHtml += `<strong>${esc(v('issuerName'))}</strong>`;
+    if (v('issuerZip')) issuerHtml += `<div class="classic-issuer-detail"><span class="classic-issuer-detail-label">郵便番号</span><span class="classic-issuer-detail-colon">：</span><span class="classic-issuer-detail-value">${esc(v('issuerZip'))}</span></div>`;
+    if (v('issuerAddress')) {
+      const addrHtml = esc(v('issuerAddress')).replace(/\n/g, '<br>');
+      issuerHtml += `<div class="classic-issuer-detail"><span class="classic-issuer-detail-label">住所</span><span class="classic-issuer-detail-colon">：</span><span class="classic-issuer-detail-value">${addrHtml}</span></div>`;
+    }
+    if (v('issuerPhone')) issuerHtml += `<div class="classic-issuer-detail"><span class="classic-issuer-detail-label">電話番号</span><span class="classic-issuer-detail-colon">：</span><span class="classic-issuer-detail-value">${esc(v('issuerPhone'))}</span></div>`;
+    if (v('issuerEmail')) issuerHtml += `<div class="classic-issuer-detail"><span class="classic-issuer-detail-label">メール</span><span class="classic-issuer-detail-colon">：</span><span class="classic-issuer-detail-value">${esc(v('issuerEmail'))}</span></div>`;
+    document.getElementById('cIssuerInfo').innerHTML = issuerHtml;
+
+    // Table - fill 8 rows (matching PDF layout)
+    const tbody = document.getElementById('cTableBody');
+    tbody.innerHTML = '';
+    const minRows = 8;
+    for (let i = 0; i < Math.max(minRows, lineData.length); i++) {
+      const tr = document.createElement('tr');
+      if (i < lineData.length) {
+        const d = lineData[i];
+        tr.innerHTML = `
+          <td>${esc(d.name) || '—'}</td>
+          <td>${fmt(d.quantity)}</td>
+          <td>${fmtYen(d.displayPrice)}</td>
+          <td>${fmtYen(d.lineExTax)}</td>
+        `;
+      } else {
+        tr.innerHTML = '<td>&nbsp;</td><td></td><td></td><td></td>';
+      }
+      tbody.appendChild(tr);
+    }
+
+    // Summary
+    document.getElementById('cSubtotalLabel').textContent = '小計';
+    document.getElementById('cSubtotal').textContent = fmtYen(subtotalExTax);
+    document.getElementById('cTaxLabel').textContent = `消費税（${taxPct}）`;
+    document.getElementById('cTax').textContent = fmtYen(totalTax);
+    document.getElementById('cTotalLabel').textContent = '合計';
+    document.getElementById('cTotal').textContent = fmtYen(grandTotal);
+
+    // Bank box
+    const notes = v('notes');
+    const noteText = notes
+      ? `お振込先　※${notes}`
+      : 'お振込先　※恐れ入りますがお振込み手数料は貴社にてご負担ください';
+    document.getElementById('cBankNote').textContent = noteText;
+
+    let bankHtml = '';
+    if (v('bankName')) bankHtml += `<div style="width:100%">${esc(v('bankName'))}</div>`;
+    if (v('bankBranch')) bankHtml += `<div style="width:100%">${esc(v('bankBranch'))}</div>`;
+    if (v('bankType')) bankHtml += `<div style="width:100%">${esc(v('bankType'))}</div>`;
+    if (v('bankAccount')) bankHtml += `<div style="width:100%">${esc(v('bankAccount'))}</div>`;
+    if (v('bankHolder')) bankHtml += `<div style="width:100%">${esc(v('bankHolder'))}</div>`;
+    document.getElementById('cBankDetail').innerHTML = bankHtml;
   }
 
   // ===== FORMATTING =====
@@ -1624,7 +2094,8 @@
   }
 
   function applyZoom() {
-    const page = document.getElementById('invoicePreview');
+    const pageId = currentTemplate === 'modern' ? 'invoicePreview' : 'classicPreview';
+    const page = document.getElementById(pageId);
     page.style.transform = `scale(${currentZoom})`;
     page.style.transformOrigin = 'top center';
     document.getElementById('zoomLabel').textContent = Math.round(currentZoom * 100) + '%';
@@ -1632,21 +2103,19 @@
 
   // ===== PDF EXPORT =====
   function exportPDF() {
-    // PDF出力時にプロフィールも自動保存
     saveProfile();
 
     const overlay = document.getElementById('savingOverlay');
     overlay.classList.add('active');
 
-    const el = document.getElementById('invoicePreview');
+    const pageId = currentTemplate === 'modern' ? 'invoicePreview' : 'classicPreview';
+    const el = document.getElementById(pageId);
 
-    // ズームをリセットして出力、完了後に戻す
     const prevZoom = currentZoom;
     currentZoom = 1.0;
     el.style.transform = 'scale(1)';
     el.style.transformOrigin = 'top center';
 
-    // ファイル名: 請求書_(相手名)_(品目)_(発行者名)
     const clientName = document.getElementById('clientName').value || '請求先';
     const issuerName = document.getElementById('issuerName').value || '発行元';
     const firstItem = items[0] && items[0].name ? items[0].name : '品目';
