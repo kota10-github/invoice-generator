@@ -677,7 +677,8 @@
     margin-bottom: 28px;
   }
 
-  .login-card input[type="email"] {
+  .login-card input[type="email"],
+  .login-card input[type="password"] {
     width: 100%;
     padding: 12px 14px;
     border: 1px solid #d0d5dd;
@@ -687,9 +688,11 @@
     background: #f9fafb;
     color: #333;
     transition: border-color 0.2s;
+    margin-bottom: 10px;
   }
 
-  .login-card input[type="email"]:focus {
+  .login-card input[type="email"]:focus,
+  .login-card input[type="password"]:focus {
     outline: none;
     border-color: #2c5f7c;
     background: #fff;
@@ -698,8 +701,36 @@
   .login-card .login-hint {
     font-size: 11px;
     color: #aaa;
-    margin-top: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
     text-align: left;
+  }
+
+  .login-error {
+    font-size: 12px;
+    color: #d94032;
+    margin-top: 8px;
+    min-height: 18px;
+  }
+
+  .login-toggle {
+    font-size: 12px;
+    color: #2c5f7c;
+    margin-top: 16px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .login-toggle:hover {
+    color: #3a7ca5;
+  }
+
+  .password-requirements {
+    font-size: 10px;
+    color: #999;
+    text-align: left;
+    margin-top: 2px;
+    margin-bottom: 4px;
   }
 
   .btn-login {
@@ -813,10 +844,17 @@
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <h2>請求書作成ツール</h2>
-    <p class="login-sub">メールアドレスでログインしてください</p>
+    <p class="login-sub" id="loginSubtext">ログインしてください</p>
     <input type="email" id="loginEmail" placeholder="example@company.com" autocomplete="email">
-    <p class="login-hint">入力した情報はこのメールアドレスに紐づけて保存されます</p>
+    <input type="password" id="loginPassword" placeholder="パスワード" autocomplete="current-password">
+    <div id="passwordConfirmWrap" style="display:none">
+      <input type="password" id="loginPasswordConfirm" placeholder="パスワード（確認）" autocomplete="new-password">
+      <p class="password-requirements">6文字以上で設定してください</p>
+    </div>
+    <p class="login-hint">入力した情報はこのアカウントに紐づけて保存されます</p>
+    <div class="login-error" id="loginError"></div>
     <button class="btn-login" id="btnLogin" disabled>ログイン</button>
+    <div class="login-toggle" id="loginToggle" onclick="toggleLoginMode()">アカウントをお持ちでない方はこちら（新規登録）</div>
   </div>
 </div>
 
@@ -1057,46 +1095,157 @@
   let accentColor = '#2c5f7c';
   let items = [{ name: '', quantity: 1, price: 0 }];
   let currentUserEmail = null;
+  let isRegisterMode = false;
 
-  // ===== HASH (メールアドレスからストレージキーを生成、他人のデータを見れないようにする) =====
-  async function hashEmail(email) {
-    const normalized = email.trim().toLowerCase();
+  // ===== HASH =====
+  async function hashString(str) {
     const encoder = new TextEncoder();
-    const data = encoder.encode('inv_tool_salt_2026_' + normalized);
+    const data = encoder.encode(str);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return 'inv_' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function hashEmail(email) {
+    const normalized = email.trim().toLowerCase();
+    const hash = await hashString('inv_tool_salt_2026_' + normalized);
+    return 'inv_' + hash.slice(0, 32);
+  }
+
+  async function hashPassword(email, password) {
+    const normalized = email.trim().toLowerCase();
+    return await hashString('inv_pw_salt_' + normalized + '_' + password);
+  }
+
+  // ===== AUTH =====
+  function getAuthKey(email) {
+    return 'inv_auth_' + email.trim().toLowerCase();
+  }
+
+  async function registerUser(email, password) {
+    const authKey = getAuthKey(email);
+    if (localStorage.getItem(authKey)) {
+      return { ok: false, msg: 'このメールアドレスは既に登録されています' };
+    }
+    const pwHash = await hashPassword(email, password);
+    localStorage.setItem(authKey, JSON.stringify({ pwHash }));
+    return { ok: true };
+  }
+
+  async function authenticateUser(email, password) {
+    const authKey = getAuthKey(email);
+    const raw = localStorage.getItem(authKey);
+    if (!raw) {
+      return { ok: false, msg: 'アカウントが見つかりません。新規登録してください' };
+    }
+    const stored = JSON.parse(raw);
+    const pwHash = await hashPassword(email, password);
+    if (stored.pwHash !== pwHash) {
+      return { ok: false, msg: 'パスワードが正しくありません' };
+    }
+    return { ok: true };
   }
 
   // ===== LOGIN =====
   function setupLogin() {
     const emailInput = document.getElementById('loginEmail');
+    const pwInput = document.getElementById('loginPassword');
     const btnLogin = document.getElementById('btnLogin');
 
-    emailInput.addEventListener('input', () => {
-      btnLogin.disabled = !emailInput.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-    });
+    function validateForm() {
+      const emailOk = emailInput.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+      const pwOk = pwInput.value.length >= 6;
+      let confirmOk = true;
+      if (isRegisterMode) {
+        const confirmInput = document.getElementById('loginPasswordConfirm');
+        confirmOk = confirmInput.value.length >= 6;
+      }
+      btnLogin.disabled = !(emailOk && pwOk && confirmOk);
+    }
 
-    emailInput.addEventListener('keydown', (e) => {
+    emailInput.addEventListener('input', validateForm);
+    pwInput.addEventListener('input', validateForm);
+    document.getElementById('loginPasswordConfirm').addEventListener('input', validateForm);
+
+    pwInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !btnLogin.disabled) doLogin();
+    });
+    document.getElementById('loginPasswordConfirm').addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !btnLogin.disabled) doLogin();
     });
 
     btnLogin.addEventListener('click', doLogin);
 
     // 前回のセッションを復元
-    const lastEmail = sessionStorage.getItem('inv_current_user');
-    if (lastEmail) {
-      emailInput.value = lastEmail;
-      btnLogin.disabled = false;
-      doLogin();
+    const lastSession = sessionStorage.getItem('inv_current_session');
+    if (lastSession) {
+      try {
+        const sess = JSON.parse(lastSession);
+        currentUserEmail = sess.email;
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('userBar').style.display = 'flex';
+        document.getElementById('userBarEmail').textContent = sess.email;
+        loadProfile().then(() => init());
+      } catch(e) { sessionStorage.removeItem('inv_current_session'); }
     }
+  }
+
+  function toggleLoginMode() {
+    isRegisterMode = !isRegisterMode;
+    const toggle = document.getElementById('loginToggle');
+    const subtext = document.getElementById('loginSubtext');
+    const btn = document.getElementById('btnLogin');
+    const confirmWrap = document.getElementById('passwordConfirmWrap');
+    const errorEl = document.getElementById('loginError');
+    errorEl.textContent = '';
+
+    if (isRegisterMode) {
+      subtext.textContent = '新規アカウントを作成';
+      btn.textContent = '新規登録';
+      toggle.textContent = '既にアカウントをお持ちの方はこちら（ログイン）';
+      confirmWrap.style.display = 'block';
+      document.getElementById('loginPassword').autocomplete = 'new-password';
+    } else {
+      subtext.textContent = 'ログインしてください';
+      btn.textContent = 'ログイン';
+      toggle.textContent = 'アカウントをお持ちでない方はこちら（新規登録）';
+      confirmWrap.style.display = 'none';
+      document.getElementById('loginPassword').autocomplete = 'current-password';
+    }
+    // Re-validate
+    document.getElementById('btnLogin').disabled = true;
+    document.getElementById('loginEmail').dispatchEvent(new Event('input'));
   }
 
   async function doLogin() {
     const email = document.getElementById('loginEmail').value.trim();
-    if (!email) return;
+    const password = document.getElementById('loginPassword').value;
+    const errorEl = document.getElementById('loginError');
+    errorEl.textContent = '';
+
+    if (!email || password.length < 6) return;
+
+    if (isRegisterMode) {
+      const confirm = document.getElementById('loginPasswordConfirm').value;
+      if (password !== confirm) {
+        errorEl.textContent = 'パスワードが一致しません';
+        return;
+      }
+      const result = await registerUser(email, password);
+      if (!result.ok) {
+        errorEl.textContent = result.msg;
+        return;
+      }
+    } else {
+      const result = await authenticateUser(email, password);
+      if (!result.ok) {
+        errorEl.textContent = result.msg;
+        return;
+      }
+    }
+
     currentUserEmail = email;
-    sessionStorage.setItem('inv_current_user', email);
+    sessionStorage.setItem('inv_current_session', JSON.stringify({ email }));
 
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('userBar').style.display = 'flex';
@@ -1108,14 +1257,19 @@
 
   function logout() {
     currentUserEmail = null;
-    sessionStorage.removeItem('inv_current_user');
-    // フォームをリセット
+    sessionStorage.removeItem('inv_current_session');
     items = [{ name: '', quantity: 1, price: 0 }];
     accentColor = '#2c5f7c';
     document.getElementById('loginScreen').classList.remove('hidden');
     document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginPasswordConfirm').value = '';
+    document.getElementById('loginError').textContent = '';
     document.getElementById('btnLogin').disabled = true;
     document.getElementById('userBar').style.display = 'none';
+    // Reset to login mode
+    isRegisterMode = true;
+    toggleLoginMode();
   }
 
   // ===== PROFILE SAVE / LOAD =====
